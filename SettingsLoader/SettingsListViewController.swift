@@ -2,8 +2,8 @@
 //  SettingsListViewController.swift
 //  SettingsLoader
 //
-//  Created by Кирилл Штеффен on 21/11/2018.
-//  Copyright © 2018 Кирилл Штеффен. All rights reserved.
+//  Created by Kirill Shteffen on 21/11/2018.
+//  Copyright © 2018 Kirill Shteffen. All rights reserved.
 //
 
 import UIKit
@@ -12,6 +12,7 @@ class SettingsListViewController: UIViewController {
 
     var settingsList: [SettingsObject] = []
     
+    @IBOutlet weak var settingsTable: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,9 +20,9 @@ class SettingsListViewController: UIViewController {
     }
     
     func fillSettingsList() {
-        let settingsOne = SettingsObject(withParameters: "HighSettings", firstInputParameter: "High", secondInputParameter: "High")
-        let settingsTwo = SettingsObject(withParameters: "MediumSettings", firstInputParameter: "Medium", secondInputParameter: "Medium")
-        let settingsThree = SettingsObject(withParameters: "LowSettings", firstInputParameter: "Low", secondInputParameter: "Low")
+        let settingsOne = SettingsObject(withParameters: "High Settings", firstInputParameter: "High", secondInputParameter: "High")
+        let settingsTwo = SettingsObject(withParameters: "Medium Settings", firstInputParameter: "Medium", secondInputParameter: "Medium")
+        let settingsThree = SettingsObject(withParameters: "Low Settings", firstInputParameter: "Low", secondInputParameter: "Low")
         
         settingsList.append(settingsOne)
         settingsList.append(settingsTwo)
@@ -43,7 +44,6 @@ extension SettingsListViewController: UITableViewDelegate, UITableViewDataSource
         
         cell.setLabel(settings: settingsList[indexPath.row])
         return cell
-        
     }
     
     

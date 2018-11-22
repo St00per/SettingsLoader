@@ -2,8 +2,8 @@
 //  SettingsObject.swift
 //  SettingsLoader
 //
-//  Created by Кирилл Штеффен on 21/11/2018.
-//  Copyright © 2018 Кирилл Штеффен. All rights reserved.
+//  Created by Kirill Shteffen on 21/11/2018.
+//  Copyright © 2018 Kirill Shteffen. All rights reserved.
 //
 
 import Foundation
