@@ -8,17 +8,12 @@
 
 import Foundation
 
-class SettingsObject {
+struct SettingsPresets: Codable {
+    let preset: SettingsObject
+}
+
+struct SettingsObject: Codable {
     
-    var settingsTitle = ""
-    
-    var firstParameter = ""
-    var secondParameter = ""
-    
-    init(withParameters title: String, firstInputParameter: String, secondInputParameter: String) {
-        settingsTitle = title
-        firstParameter = firstInputParameter
-        secondParameter = secondInputParameter
-    }
+    let preset_id: String
     
 }

@@ -20,13 +20,21 @@ class SettingsListViewController: UIViewController {
     }
     
     func fillSettingsList() {
-        let settingsOne = SettingsObject(withParameters: "High Settings", firstInputParameter: "High", secondInputParameter: "High")
-        let settingsTwo = SettingsObject(withParameters: "Medium Settings", firstInputParameter: "Medium", secondInputParameter: "Medium")
-        let settingsThree = SettingsObject(withParameters: "Low Settings", firstInputParameter: "Low", secondInputParameter: "Low")
         
-        settingsList.append(settingsOne)
-        settingsList.append(settingsTwo)
-        settingsList.append(settingsThree)
+        let url = Bundle.main.url(forResource: "presets", withExtension: "json")!
+        do {
+            let jsonData = try? Data(contentsOf: url)
+            guard let localData = jsonData else {
+                return
+            }
+            let settingsObject = try? JSONDecoder().decode(SettingsObject.self, from: localData)
+            
+            guard let createdObject = settingsObject else {
+                return
+            }
+            
+            settingsList.append(createdObject)
+        }
     }
 }
 

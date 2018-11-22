@@ -21,7 +21,7 @@ class SettingsTableViewCell: UITableViewCell {
     }
 
     func setLabel(settings: SettingsObject) {
-        settingsLabel.text = settings.settingsTitle
+        settingsLabel.text = settings.preset_id
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

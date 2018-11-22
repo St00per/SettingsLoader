@@ -1,0 +1,16 @@
+
+  {
+    "preset_id": "default_gain",
+    "preset_name": "default",
+    "is_enabled" : true,
+    "preset_type": "embedded",
+    "type": "gain",
+    "parameters": {
+      "gain": 0,
+      "phase": 0,
+      "pad": 0,
+      "notch1": 180,
+      "notch2": 180
+    }
+  }
+
