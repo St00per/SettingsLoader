@@ -46,6 +46,7 @@
                                                 </tableViewCellContentView>
                                                 <connections>
                                                     <outlet property="settingsLabel" destination="PJH-cF-qTG" id="zfu-gh-xCb"/>
+                                                    <segue destination="d63-P6-qO6" kind="showDetail" identifier="Show Detail" id="76S-7j-Gp8"/>
                                                 </connections>
                                             </tableViewCell>
                                         </prototypes>
@@ -63,6 +64,7 @@
                                                     <segment title="Cloud"/>
                                                     <segment title="Local"/>
                                                 </segments>
+                                                <color key="tintColor" red="0.16078431369999999" green="0.21960784310000001" blue="0.2784313725" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             </segmentedControl>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -103,6 +105,57 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="133.59999999999999" y="133.5832083958021"/>
+        </scene>
+        <!--Detail Settings View Controller-->
+        <scene sceneID="Rpo-oN-SKa">
+            <objects>
+                <viewController id="d63-P6-qO6" customClass="DetailSettingsViewController" customModule="SettingsLoader" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="O8B-j4-6EZ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OFJ-9L-Wis">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <subviews>
+                                    <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="uYK-DC-xfS">
+                                        <rect key="frame" x="19" y="46" width="288" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FpJ-sm-dvi">
+                                        <rect key="frame" x="52" y="87" width="31" height="27"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.16078431369999999" green="0.21960784310000001" blue="0.2784313725" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <state key="normal" title="SAVE">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="saveButton:" destination="d63-P6-qO6" eventType="touchUpInside" id="xYa-V7-SWY"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="OFJ-9L-Wis" firstAttribute="leading" secondItem="yOO-uq-RaF" secondAttribute="leading" id="3YF-VI-259"/>
+                            <constraint firstItem="OFJ-9L-Wis" firstAttribute="trailing" secondItem="yOO-uq-RaF" secondAttribute="trailing" id="8ae-CS-NOq"/>
+                            <constraint firstItem="OFJ-9L-Wis" firstAttribute="top" secondItem="O8B-j4-6EZ" secondAttribute="top" id="OJ6-94-Q2A"/>
+                            <constraint firstItem="OFJ-9L-Wis" firstAttribute="bottom" secondItem="yOO-uq-RaF" secondAttribute="bottom" id="jvQ-TW-9R1"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="yOO-uq-RaF"/>
+                    </view>
+                    <connections>
+                        <outlet property="settingEditTextField" destination="uYK-DC-xfS" id="5rj-bk-Eyr"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8aD-eo-Ucu" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="860" y="133.5832083958021"/>
         </scene>
     </scenes>
 </document>

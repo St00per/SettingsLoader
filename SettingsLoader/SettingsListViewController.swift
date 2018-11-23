@@ -7,9 +7,10 @@
 //
 
 import UIKit
+import Firebase
 
 class SettingsListViewController: UIViewController {
-
+    
     var settingsList: [SettingsObject] = []
     
     @IBOutlet weak var settingsTable: UITableView!
@@ -32,7 +33,6 @@ class SettingsListViewController: UIViewController {
             guard let createdObject = settingsObject else {
                 return
             }
-            
             settingsList.append(createdObject)
         }
     }
@@ -54,5 +54,8 @@ extension SettingsListViewController: UITableViewDelegate, UITableViewDataSource
         return cell
     }
     
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        //let settingsObject = settingsList[indexPath.row]
+        performSegue(withIdentifier: "Show Detail", sender: nil)
+    }
 }
