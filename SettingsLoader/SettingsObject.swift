@@ -14,12 +14,22 @@ struct SettingsPresets: Codable {
 
 struct SettingsObject: Codable {
     
-    let preset_id: String
-    let preset_name: String
-    let is_enabled: Bool
-    let preset_type: String
-    let type: String
-    let parameters: Parameters
+    var preset_id: String?
+    let preset_name: String?
+    let is_enabled: Bool?
+    let preset_type: String?
+    let type: String?
+    let parameters: Parameters?
+    
+    init(preset_id: String? = nil, preset_name: String? = nil, is_enabled: Bool? = nil, preset_type: String? = nil, type: String? = nil, parameters: Parameters? = nil
+         ) {
+        self.preset_id = preset_id
+        self.preset_name = preset_name
+        self.is_enabled = is_enabled
+        self.preset_type = preset_type
+        self.type = type
+        self.parameters = parameters
+    }
     
 }
 

@@ -12,29 +12,60 @@ import Firebase
 class SettingsListViewController: UIViewController {
     
     var settingsList: [SettingsObject] = []
+    var docRef: DocumentReference!
+    
+    enum DataState {
+        case local
+        case cloud
+    }
+    var dataState: DataState = .local
     
     @IBOutlet weak var settingsTable: UITableView!
+    @IBAction func switchToLocal(_ sender: Any) {
+        dataStateChange(dataState: .local)
+    }
+    @IBAction func switchToCloud(_ sender: Any) {
+        dataStateChange(dataState: .cloud)
+    }
+    
+    func dataStateChange(dataState: DataState)  {
+        self.dataState = dataState
+        fillSettingsList()
+        //settingsTable.reloadData()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        docRef = Firestore.firestore().collection("SettingsList").document("default_gain")
         fillSettingsList()
     }
     
     func fillSettingsList() {
-        
-        let url = Bundle.main.url(forResource: "preset", withExtension: "json")!
+        settingsList = []
+        if dataState == .local {
+            let url = Bundle.main.url(forResource: "preset", withExtension: "json")!
         do {
             let jsonData = try? Data(contentsOf: url)
-            guard let localData = jsonData else {
-                return
-            }
+            guard let localData = jsonData else { return }
             let settingsObject = try? JSONDecoder().decode(SettingsObject.self, from: localData)
             
-            guard let createdObject = settingsObject else {
-                return
-            }
+            guard let createdObject = settingsObject else { return }
             settingsList.append(createdObject)
+            self.settingsTable.reloadData()
+            }
         }
+        if dataState == .cloud{
+            docRef.getDocument { (docSnapshot,error) in
+                guard let docSnapshot = docSnapshot, docSnapshot.exists else { return }
+                let myData = docSnapshot.data()
+                var settingsObject = SettingsObject()
+                settingsObject.preset_id = myData?["preset_id"] as? String ?? "(none)"
+                
+                self.settingsList.append(settingsObject)
+                self.settingsTable.reloadData()
+            }
+        }
+        
     }
 }
 
@@ -55,7 +86,7 @@ extension SettingsListViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //let settingsObject = settingsList[indexPath.row]
+        
         performSegue(withIdentifier: "Show Detail", sender: nil)
     }
 }
