@@ -43,7 +43,8 @@ class SettingsListViewController: UIViewController {
     func fillSettingsList() {
         settingsList = []
         if dataState == .local {
-            let url = Bundle.main.url(forResource: "preset", withExtension: "json")!
+            guard let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("newPreset.json") else { return }
+                //Bundle.main.url(forResource: "preset", withExtension: "json")!
         do {
             let jsonData = try? Data(contentsOf: url)
             guard let localData = jsonData else { return }

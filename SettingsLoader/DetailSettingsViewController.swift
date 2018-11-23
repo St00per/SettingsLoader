@@ -18,6 +18,20 @@ class DetailSettingsViewController: UIViewController {
     
     @IBAction func saveLocalButton(_ sender: Any) {
         
+        let jsonEncoder = JSONEncoder()
+        do {
+            let jsonData = try? jsonEncoder.encode(SettingsObject(preset_id: "TESTIN", preset_name: nil, is_enabled: nil, preset_type: "BANG", type: nil, parameters: nil))
+            //let fileManager = FileManager.default
+            let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("newPreset.json")
+            //let jsonUrl = url?.appendingPathComponent("newPreset.json")
+            print(url)
+            guard let writeUrl = url else { return }
+            try! jsonData?.write(to: writeUrl)
+//            guard let dataToPrint = jsonData else { return }
+//            let jsonString = String(data: dataToPrint, encoding: .utf8)
+//            print("JSON String : " + jsonString!)
+        }
+        //performSegue(withIdentifier: "BackToList", sender: nil)
     }
     
     @IBAction func saveToCloudButton(_ sender: Any) {
