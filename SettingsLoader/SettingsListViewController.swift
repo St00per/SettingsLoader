@@ -54,7 +54,7 @@ class SettingsListViewController: UIViewController {
             self.settingsTable.reloadData()
             }
         }
-        if dataState == .cloud{
+        if dataState == .cloud {
             docRef.getDocument { (docSnapshot,error) in
                 guard let docSnapshot = docSnapshot, docSnapshot.exists else { return }
                 let myData = docSnapshot.data()
@@ -65,7 +65,6 @@ class SettingsListViewController: UIViewController {
                 self.settingsTable.reloadData()
             }
         }
-        
     }
 }
 

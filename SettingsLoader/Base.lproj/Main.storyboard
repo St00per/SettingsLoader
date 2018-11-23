@@ -105,7 +105,6 @@
                                     <constraint firstItem="SZ7-fG-bI4" firstAttribute="top" secondItem="Uqx-xv-Zo9" secondAttribute="bottom" constant="8" id="Yig-bK-3jI"/>
                                     <constraint firstItem="Uqx-xv-Zo9" firstAttribute="leading" secondItem="ELF-ZO-wLF" secondAttribute="leading" constant="8" id="cZ2-lJ-pNJ"/>
                                     <constraint firstItem="SZ7-fG-bI4" firstAttribute="leading" secondItem="ELF-ZO-wLF" secondAttribute="leading" id="fQE-eJ-ecv"/>
-                                    <constraint firstItem="Uqx-xv-Zo9" firstAttribute="top" secondItem="ELF-ZO-wLF" secondAttribute="top" constant="17" id="jc1-ks-Z72"/>
                                     <constraint firstItem="Uqx-xv-Zo9" firstAttribute="top" secondItem="ELF-ZO-wLF" secondAttribute="top" constant="17" id="qoP-xY-Frs"/>
                                     <constraint firstAttribute="bottom" secondItem="SZ7-fG-bI4" secondAttribute="bottom" id="uhl-PN-KrK"/>
                                 </constraints>
@@ -175,6 +174,7 @@
                                         </state>
                                         <connections>
                                             <action selector="saveToCloudButton:" destination="d63-P6-qO6" eventType="touchUpInside" id="z0L-CK-8YO"/>
+                                            <segue destination="BYZ-38-t0r" kind="show" identifier="BackToList" id="kaA-WK-Xak"/>
                                         </connections>
                                     </button>
                                 </subviews>

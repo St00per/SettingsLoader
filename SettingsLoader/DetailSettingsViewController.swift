@@ -32,6 +32,7 @@ class DetailSettingsViewController: UIViewController {
                 print ("Data succefully saved")
             }
         }
+        performSegue(withIdentifier: "BackToList", sender: nil)
     }
     
     override func viewDidLoad() {
