@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0E5885D221A69BD300C0F9B8 /* presets.json in Resources */ = {isa = PBXBuildFile; fileRef = 0E5885D121A69BD300C0F9B8 /* presets.json */; };
+		0E5885D221A69BD300C0F9B8 /* preset.json in Resources */ = {isa = PBXBuildFile; fileRef = 0E5885D121A69BD300C0F9B8 /* preset.json */; };
 		0E5885D421A6B54400C0F9B8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0E5885D321A6B54400C0F9B8 /* GoogleService-Info.plist */; };
 		0E5885D621A6BE2A00C0F9B8 /* DetailSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E5885D521A6BE2A00C0F9B8 /* DetailSettingsViewController.swift */; };
 		0ED8990D21A577F7000D581E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ED8990C21A577F7000D581E /* AppDelegate.swift */; };
@@ -42,7 +42,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0E5885D121A69BD300C0F9B8 /* presets.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = presets.json; sourceTree = "<group>"; };
+		0E5885D121A69BD300C0F9B8 /* preset.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = preset.json; sourceTree = "<group>"; };
 		0E5885D321A6B54400C0F9B8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		0E5885D521A6BE2A00C0F9B8 /* DetailSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailSettingsViewController.swift; sourceTree = "<group>"; };
 		0ED8990921A577F7000D581E /* SettingsLoader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SettingsLoader.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -131,7 +131,7 @@
 				0ED8990C21A577F7000D581E /* AppDelegate.swift */,
 				0ED8991021A577F7000D581E /* Main.storyboard */,
 				0E5885D321A6B54400C0F9B8 /* GoogleService-Info.plist */,
-				0E5885D121A69BD300C0F9B8 /* presets.json */,
+				0E5885D121A69BD300C0F9B8 /* preset.json */,
 				0ED8991321A5780A000D581E /* Assets.xcassets */,
 				0ED8991521A5780A000D581E /* LaunchScreen.storyboard */,
 				0ED8991821A5780A000D581E /* Info.plist */,
@@ -291,7 +291,7 @@
 				0ED8991721A5780A000D581E /* LaunchScreen.storyboard in Resources */,
 				0ED8991421A5780A000D581E /* Assets.xcassets in Resources */,
 				0E5885D421A6B54400C0F9B8 /* GoogleService-Info.plist in Resources */,
-				0E5885D221A69BD300C0F9B8 /* presets.json in Resources */,
+				0E5885D221A69BD300C0F9B8 /* preset.json in Resources */,
 				0ED8991221A577F7000D581E /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

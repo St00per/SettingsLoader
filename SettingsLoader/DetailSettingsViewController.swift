@@ -14,9 +14,14 @@ class DetailSettingsViewController: UIViewController {
     
     var docRef: DocumentReference!
     
-    @IBOutlet weak var settingEditTextField: UITextField!
-    @IBAction func saveButton(_ sender: Any) {
-        guard let editedText = settingEditTextField.text, !editedText.isEmpty else {
+    @IBOutlet weak var presetIDTextField: UITextField!
+    
+    @IBAction func saveLocalButton(_ sender: Any) {
+        
+    }
+    
+    @IBAction func saveToCloudButton(_ sender: Any) {
+        guard let editedText = presetIDTextField.text, !editedText.isEmpty else {
             return
         }
         let dataToSave: [String: Any] = ["preset_id": editedText]
@@ -26,7 +31,6 @@ class DetailSettingsViewController: UIViewController {
             } else{
                 print ("Data succefully saved")
             }
-            
         }
     }
     

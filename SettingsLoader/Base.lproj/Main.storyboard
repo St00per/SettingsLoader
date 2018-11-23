@@ -32,8 +32,14 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SettingsLabel" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PJH-cF-qTG">
-                                                            <rect key="frame" x="15" y="11" width="105" height="21"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="presetIDLabel" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PJH-cF-qTG">
+                                                            <rect key="frame" x="106.5" y="11" width="107" height="21"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Preset ID:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fQr-QF-CYM">
+                                                            <rect key="frame" x="15" y="11" width="74.5" height="22"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
@@ -41,11 +47,14 @@
                                                     </subviews>
                                                     <constraints>
                                                         <constraint firstItem="PJH-cF-qTG" firstAttribute="top" secondItem="fc2-fr-y1L" secondAttribute="topMargin" id="B0j-8E-hEc"/>
-                                                        <constraint firstItem="PJH-cF-qTG" firstAttribute="leading" secondItem="fc2-fr-y1L" secondAttribute="leadingMargin" id="Ubt-2W-Yp5"/>
+                                                        <constraint firstItem="PJH-cF-qTG" firstAttribute="leading" secondItem="fQr-QF-CYM" secondAttribute="trailing" constant="17" id="Fys-zT-kyq"/>
+                                                        <constraint firstItem="fQr-QF-CYM" firstAttribute="leading" secondItem="fc2-fr-y1L" secondAttribute="leadingMargin" id="Gj1-dx-NaD"/>
+                                                        <constraint firstItem="fQr-QF-CYM" firstAttribute="bottom" secondItem="fc2-fr-y1L" secondAttribute="bottomMargin" id="aNa-sV-NPS"/>
+                                                        <constraint firstItem="fQr-QF-CYM" firstAttribute="top" secondItem="fc2-fr-y1L" secondAttribute="topMargin" id="fnJ-ED-u9K"/>
                                                     </constraints>
                                                 </tableViewCellContentView>
                                                 <connections>
-                                                    <outlet property="settingsLabel" destination="PJH-cF-qTG" id="zfu-gh-xCb"/>
+                                                    <outlet property="presetIDLabel" destination="PJH-cF-qTG" id="Sys-xg-zVS"/>
                                                     <segue destination="d63-P6-qO6" kind="showDetail" identifier="Show Detail" id="76S-7j-Gp8"/>
                                                 </connections>
                                             </tableViewCell>
@@ -118,22 +127,41 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="uYK-DC-xfS">
-                                        <rect key="frame" x="19" y="46" width="288" height="30"/>
+                                        <rect key="frame" x="125" y="46" width="182" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FpJ-sm-dvi">
-                                        <rect key="frame" x="52" y="87" width="31" height="27"/>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SvA-fS-GXs">
+                                        <rect key="frame" x="19" y="84" width="141" height="52"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="0.16078431369999999" green="0.21960784310000001" blue="0.2784313725" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                        <state key="normal" title="SAVE">
+                                        <state key="normal" title="LOCAL SAVE">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
-                                            <action selector="saveButton:" destination="d63-P6-qO6" eventType="touchUpInside" id="xYa-V7-SWY"/>
+                                            <action selector="saveLocalButton:" destination="d63-P6-qO6" eventType="touchUpInside" id="D4s-Za-N42"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Preset_id:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O7C-FJ-wx8">
+                                        <rect key="frame" x="30" y="51" width="75" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FpJ-sm-dvi">
+                                        <rect key="frame" x="180" y="84" width="141" height="52"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.16078431369999999" green="0.21960784310000001" blue="0.2784313725" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <state key="normal" title="CLOUD SAVE">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="saveToCloudButton:" destination="d63-P6-qO6" eventType="touchUpInside" id="z0L-CK-8YO"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -150,7 +178,7 @@
                         <viewLayoutGuide key="safeArea" id="yOO-uq-RaF"/>
                     </view>
                     <connections>
-                        <outlet property="settingEditTextField" destination="uYK-DC-xfS" id="5rj-bk-Eyr"/>
+                        <outlet property="presetIDTextField" destination="uYK-DC-xfS" id="soL-vy-AbB"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8aD-eo-Ucu" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -22,7 +22,7 @@ class SettingsListViewController: UIViewController {
     
     func fillSettingsList() {
         
-        let url = Bundle.main.url(forResource: "presets", withExtension: "json")!
+        let url = Bundle.main.url(forResource: "preset", withExtension: "json")!
         do {
             let jsonData = try? Data(contentsOf: url)
             guard let localData = jsonData else {
