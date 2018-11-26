@@ -38,19 +38,20 @@ class DetailSettingsViewController: UIViewController {
         
         let jsonEncoder = JSONEncoder()
         do {
-            let jsonData = try? jsonEncoder.encode(SettingsObject(preset_id: presetIDTextField.text, preset_name: presetNameTextField.text, is_enabled: presetEnableSwitch.isOn, preset_type: nil, type: presetTypeTextField.text, parameters: nil))
-            let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("newPreset.json")
+            let jsonData = try! jsonEncoder.encode(SettingsObject(preset_id: presetIDTextField.text, preset_name: presetNameTextField.text, is_enabled: presetEnableSwitch.isOn, preset_type: nil, type: presetTypeTextField.text, parameters: nil))
+            let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("\((presetNameTextField.text ?? "Unnamed")).json")
             guard let writeUrl = url else { return }
-            try! jsonData?.write(to: writeUrl)
+            try! jsonData.write(to: writeUrl)
         }
         self.dismiss(animated: true)
     }
     
     @IBAction func saveToCloudButton(_ sender: Any) {
-        guard let editedText = presetIDTextField.text, !editedText.isEmpty else {
-            return
-        }
-        let dataToSave: [String: Any] = ["preset_id": editedText]
+
+        let dataToSave: [String: Any] = ["preset_id": presetIDTextField.text ?? "(none)",
+                                         "preset_name": presetNameTextField.text ?? "Unnamed",
+                                         "is_enabled": String(presetEnableSwitch.isOn),
+                                         "type": presetTypeTextField.text ?? "(none)"]
         docRef.setData(dataToSave) { (error) in
             if let error = error {
                 print ("ERROR: \(error.localizedDescription)")
@@ -62,8 +63,11 @@ class DetailSettingsViewController: UIViewController {
     }
     
     func setPlaceholders() {
-        presetIDTextField.placeholder = selectedSettings?.preset_id
-        presetNameTextField.placeholder = selectedSettings?.preset_name
-        presetTypeTextField.placeholder = selectedSettings?.type
+        presetIDTextField.text = selectedSettings?.preset_id
+        presetNameTextField.text = selectedSettings?.preset_name
+        presetTypeTextField.text = selectedSettings?.type
+        if selectedSettings?.is_enabled == true {
+            presetEnableSwitch.isOn = true
+        }
     }
 }
