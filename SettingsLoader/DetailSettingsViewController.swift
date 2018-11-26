@@ -13,25 +13,37 @@ class DetailSettingsViewController: UIViewController {
 
     
     var docRef: DocumentReference!
+    var selectedSettings: SettingsObject?
     
     @IBOutlet weak var presetIDTextField: UITextField!
+    @IBOutlet weak var presetNameTextField: UITextField!
+    @IBOutlet weak var presetTypeTextField: UITextField!
+    @IBOutlet weak var presetEnableSwitch: UISwitch!
+    
+    @IBAction func `return`(_ sender: UIButton) {
+        self.dismiss(animated: true)
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        docRef = Firestore.firestore().collection("SettingsList").document("default_gain")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        setPlaceholders()
+    }
     
     @IBAction func saveLocalButton(_ sender: Any) {
         
         let jsonEncoder = JSONEncoder()
         do {
-            let jsonData = try? jsonEncoder.encode(SettingsObject(preset_id: "TESTIN", preset_name: nil, is_enabled: nil, preset_type: "BANG", type: nil, parameters: nil))
-            //let fileManager = FileManager.default
+            let jsonData = try? jsonEncoder.encode(SettingsObject(preset_id: presetIDTextField.text, preset_name: presetNameTextField.text, is_enabled: presetEnableSwitch.isOn, preset_type: nil, type: presetTypeTextField.text, parameters: nil))
             let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("newPreset.json")
-            //let jsonUrl = url?.appendingPathComponent("newPreset.json")
-            print(url)
             guard let writeUrl = url else { return }
             try! jsonData?.write(to: writeUrl)
-//            guard let dataToPrint = jsonData else { return }
-//            let jsonString = String(data: dataToPrint, encoding: .utf8)
-//            print("JSON String : " + jsonString!)
         }
-        //performSegue(withIdentifier: "BackToList", sender: nil)
+        self.dismiss(animated: true)
     }
     
     @IBAction func saveToCloudButton(_ sender: Any) {
@@ -46,11 +58,12 @@ class DetailSettingsViewController: UIViewController {
                 print ("Data succefully saved")
             }
         }
-        performSegue(withIdentifier: "BackToList", sender: nil)
+        self.dismiss(animated: true)
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        docRef = Firestore.firestore().collection("SettingsList").document("default_gain")
+    func setPlaceholders() {
+        presetIDTextField.placeholder = selectedSettings?.preset_id
+        presetNameTextField.placeholder = selectedSettings?.preset_name
+        presetTypeTextField.placeholder = selectedSettings?.type
     }
 }

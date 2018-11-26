@@ -21,6 +21,17 @@ class SettingsListViewController: UIViewController {
     var dataState: DataState = .local
     
     @IBOutlet weak var settingsTable: UITableView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    
+    @IBAction func addNewPreset(_ sender: Any) {
+        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        guard let desVC = mainStoryboard.instantiateViewController(withIdentifier: "DetailSettingsViewController") as? DetailSettingsViewController else {
+            return
+        }
+        show(desVC, sender: nil)
+    }
+    
     @IBAction func switchToLocal(_ sender: Any) {
         dataStateChange(dataState: .local)
     }
@@ -31,11 +42,11 @@ class SettingsListViewController: UIViewController {
     func dataStateChange(dataState: DataState)  {
         self.dataState = dataState
         fillSettingsList()
-        //settingsTable.reloadData()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        activityIndicator.isHidden = true
         docRef = Firestore.firestore().collection("SettingsList").document("default_gain")
         fillSettingsList()
     }
@@ -44,7 +55,6 @@ class SettingsListViewController: UIViewController {
         settingsList = []
         if dataState == .local {
             guard let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("newPreset.json") else { return }
-                //Bundle.main.url(forResource: "preset", withExtension: "json")!
         do {
             let jsonData = try? Data(contentsOf: url)
             guard let localData = jsonData else { return }
@@ -56,14 +66,17 @@ class SettingsListViewController: UIViewController {
             }
         }
         if dataState == .cloud {
+            activityIndicator.isHidden = false
+            activityIndicator.startAnimating()
             docRef.getDocument { (docSnapshot,error) in
                 guard let docSnapshot = docSnapshot, docSnapshot.exists else { return }
                 let myData = docSnapshot.data()
                 var settingsObject = SettingsObject()
                 settingsObject.preset_id = myData?["preset_id"] as? String ?? "(none)"
-                
                 self.settingsList.append(settingsObject)
                 self.settingsTable.reloadData()
+                self.activityIndicator.stopAnimating()
+                self.activityIndicator.isHidden = true
             }
         }
     }
@@ -86,7 +99,12 @@ extension SettingsListViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         
-        performSegue(withIdentifier: "Show Detail", sender: nil)
+        guard let desVC = mainStoryboard.instantiateViewController(withIdentifier: "DetailSettingsViewController") as? DetailSettingsViewController else {
+            return
+        }
+        desVC.selectedSettings = settingsList[indexPath.row]
+        show(desVC, sender: nil)
     }
 }
