@@ -24,7 +24,6 @@ class SettingsListViewController: UIViewController {
     
     @IBAction func addNewPreset(_ sender: Any) {
         let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        
         guard let desVC = mainStoryboard.instantiateViewController(withIdentifier: "DetailSettingsViewController") as? DetailSettingsViewController else {
             return
         }

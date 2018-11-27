@@ -12,7 +12,7 @@ class SettingsTableViewCell: UITableViewCell {
 
     static let name = String(describing: SettingsTableViewCell.self)
     
-    @IBOutlet weak var presetIDLabel: UILabel!
+    @IBOutlet weak var presetNameLabel: UILabel!
     
     
     override func awakeFromNib() {
@@ -21,7 +21,7 @@ class SettingsTableViewCell: UITableViewCell {
     }
 
     func setLabel(settings: SettingsObject) {
-        presetIDLabel.text = settings.preset_id
+        presetNameLabel.text = settings.preset_name
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

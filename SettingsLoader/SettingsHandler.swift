@@ -16,14 +16,15 @@ class SettingsHandler {
     func downloadData(source: DataSource, onCompletion: @escaping ([SettingsObject])->Void) {
         var settingsList = [SettingsObject]()
         if source == .local {
-            guard let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("tashfjgk.json") else { return onCompletion([SettingsObject]())}
-            do {
-                let jsonData = try? Data(contentsOf: url)
-                guard let localData = jsonData else { return onCompletion([SettingsObject]())}
-                let settingsObject = try? JSONDecoder().decode(SettingsObject.self, from: localData)
-                
-                guard let createdObject = settingsObject else { return onCompletion([SettingsObject]())}
-                settingsList.append(createdObject)
+            
+            let fileManager = FileManager.default
+            let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            guard let fileURLs = try? fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil) else { return onCompletion([SettingsObject]())}
+            for url in fileURLs {
+                guard let jsonData = try? Data(contentsOf: url) else { continue }
+                let settingsObject = try? JSONDecoder().decode(SettingsObject.self, from: jsonData)
+                let createdObject = settingsObject
+                settingsList.append(createdObject ?? SettingsObject())
             }
             return onCompletion(settingsList)
         }
@@ -55,7 +56,7 @@ class SettingsHandler {
     }
     
     func saveToCloudStore(settingsObject: SettingsObject) {
-        docRef = Firestore.firestore().collection("SettingsList").document("default_gain")
+        docRef = Firestore.firestore().collection("SettingsList").document(settingsObject.preset_name ?? "Unnamed")
         let dataToSave: [String: Any] = ["preset_id": settingsObject.preset_id ?? "(none)",
                                          "preset_name": settingsObject.preset_name ?? "Unnamed",
                                          "is_enabled": String(settingsObject.is_enabled ?? false),
