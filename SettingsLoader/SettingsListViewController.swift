@@ -13,12 +13,12 @@ class SettingsListViewController: UIViewController {
     
     var settingsList: [SettingsObject] = []
     var docRef: DocumentReference!
+    var dataState: DataState = .local
     
     enum DataState {
         case local
         case cloud
     }
-    var dataState: DataState = .local
     
     @IBOutlet weak var settingsTable: UITableView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
@@ -32,6 +32,7 @@ class SettingsListViewController: UIViewController {
         show(desVC, sender: nil)
     }
     
+    //Storage source selection
     @IBAction func switchToLocal(_ sender: Any) {
         dataStateChange(dataState: .local)
     }
@@ -51,10 +52,11 @@ class SettingsListViewController: UIViewController {
         fillSettingsList()
     }
     
+    //Data receiving
     func fillSettingsList() {
         settingsList = []
         if dataState == .local {
-            guard let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("test preset.json") else { return }
+            guard let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("tashfjgk.json") else { return }
         do {
             let jsonData = try? Data(contentsOf: url)
             guard let localData = jsonData else { return }
@@ -73,6 +75,9 @@ class SettingsListViewController: UIViewController {
                 let myData = docSnapshot.data()
                 var settingsObject = SettingsObject()
                 settingsObject.preset_id = myData?["preset_id"] as? String ?? "(none)"
+                settingsObject.preset_name = myData?["preset_name"] as? String ?? "(none)"
+                settingsObject.type = myData?["type"] as? String ?? "(none)"
+                settingsObject.is_enabled = myData?["preset_id"] as? Bool ?? false
                 self.settingsList.append(settingsObject)
                 self.settingsTable.reloadData()
                 self.activityIndicator.stopAnimating()

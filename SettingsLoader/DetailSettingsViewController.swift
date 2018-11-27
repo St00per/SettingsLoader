@@ -7,14 +7,13 @@
 //
 
 import UIKit
-import Firebase
 
 class DetailSettingsViewController: UIViewController {
 
     
-    var docRef: DocumentReference!
     var selectedSettings: SettingsObject?
     
+    let settingsHandler = SettingsHandler()
     @IBOutlet weak var presetIDTextField: UITextField!
     @IBOutlet weak var presetNameTextField: UITextField!
     @IBOutlet weak var presetTypeTextField: UITextField!
@@ -26,7 +25,6 @@ class DetailSettingsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        docRef = Firestore.firestore().collection("SettingsList").document("default_gain")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -34,31 +32,21 @@ class DetailSettingsViewController: UIViewController {
         setPlaceholders()
     }
     
+    //Save changes to local storage
     @IBAction func saveLocalButton(_ sender: Any) {
         
-        let jsonEncoder = JSONEncoder()
-        do {
-            let jsonData = try! jsonEncoder.encode(SettingsObject(preset_id: presetIDTextField.text, preset_name: presetNameTextField.text, is_enabled: presetEnableSwitch.isOn, preset_type: nil, type: presetTypeTextField.text, parameters: nil))
-            let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("\((presetNameTextField.text ?? "Unnamed")).json")
-            guard let writeUrl = url else { return }
-            try! jsonData.write(to: writeUrl)
-        }
+        let settingsToSave: SettingsObject = SettingsObject(preset_id: presetIDTextField.text ?? "(none)", preset_name: presetNameTextField.text ?? "Unnamed", is_enabled: presetEnableSwitch.isOn, preset_type: nil, type: presetTypeTextField.text ?? "(none)", parameters: nil)
+        settingsHandler.saveToLocalStorage(settingsObject: settingsToSave)
+        
         self.dismiss(animated: true)
     }
     
+    //Save changes to cloud storage
     @IBAction func saveToCloudButton(_ sender: Any) {
 
-        let dataToSave: [String: Any] = ["preset_id": presetIDTextField.text ?? "(none)",
-                                         "preset_name": presetNameTextField.text ?? "Unnamed",
-                                         "is_enabled": String(presetEnableSwitch.isOn),
-                                         "type": presetTypeTextField.text ?? "(none)"]
-        docRef.setData(dataToSave) { (error) in
-            if let error = error {
-                print ("ERROR: \(error.localizedDescription)")
-            } else{
-                print ("Data succefully saved")
-            }
-        }
+        let settingsToSave: SettingsObject = SettingsObject(preset_id: presetIDTextField.text ?? "(none)", preset_name: presetNameTextField.text ?? "Unnamed", is_enabled: presetEnableSwitch.isOn, preset_type: nil, type: presetTypeTextField.text ?? "(none)", parameters: nil)
+        
+        settingsHandler.saveToCloudStore(settingsObject: settingsToSave)
         self.dismiss(animated: true)
     }
     
@@ -66,8 +54,6 @@ class DetailSettingsViewController: UIViewController {
         presetIDTextField.text = selectedSettings?.preset_id
         presetNameTextField.text = selectedSettings?.preset_name
         presetTypeTextField.text = selectedSettings?.type
-        if selectedSettings?.is_enabled == true {
-            presetEnableSwitch.isOn = true
-        }
+        presetEnableSwitch.isOn = selectedSettings?.is_enabled ?? false
     }
 }

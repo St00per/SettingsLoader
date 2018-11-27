@@ -10,6 +10,7 @@
 		0E5885D221A69BD300C0F9B8 /* preset.json in Resources */ = {isa = PBXBuildFile; fileRef = 0E5885D121A69BD300C0F9B8 /* preset.json */; };
 		0E5885D421A6B54400C0F9B8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0E5885D321A6B54400C0F9B8 /* GoogleService-Info.plist */; };
 		0E5885D621A6BE2A00C0F9B8 /* DetailSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E5885D521A6BE2A00C0F9B8 /* DetailSettingsViewController.swift */; };
+		0EA7656321ACFF5300C13C13 /* SettingsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA7656221ACFF5300C13C13 /* SettingsHandler.swift */; };
 		0ED8990D21A577F7000D581E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ED8990C21A577F7000D581E /* AppDelegate.swift */; };
 		0ED8991221A577F7000D581E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0ED8991021A577F7000D581E /* Main.storyboard */; };
 		0ED8991421A5780A000D581E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0ED8991321A5780A000D581E /* Assets.xcassets */; };
@@ -45,6 +46,7 @@
 		0E5885D121A69BD300C0F9B8 /* preset.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = preset.json; sourceTree = "<group>"; };
 		0E5885D321A6B54400C0F9B8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		0E5885D521A6BE2A00C0F9B8 /* DetailSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailSettingsViewController.swift; sourceTree = "<group>"; };
+		0EA7656221ACFF5300C13C13 /* SettingsHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsHandler.swift; sourceTree = "<group>"; };
 		0ED8990921A577F7000D581E /* SettingsLoader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SettingsLoader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0ED8990C21A577F7000D581E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0ED8991121A577F7000D581E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 				0ED8993E21A57E70000D581E /* SettingsTableViewCell.swift */,
 				0E5885D521A6BE2A00C0F9B8 /* DetailSettingsViewController.swift */,
 				0ED8993A21A579F3000D581E /* SettingsObject.swift */,
+				0EA7656221ACFF5300C13C13 /* SettingsHandler.swift */,
 				0ED8990C21A577F7000D581E /* AppDelegate.swift */,
 				0ED8991021A577F7000D581E /* Main.storyboard */,
 				0E5885D321A6B54400C0F9B8 /* GoogleService-Info.plist */,
@@ -429,6 +432,7 @@
 				0ED8990D21A577F7000D581E /* AppDelegate.swift in Sources */,
 				0ED8993D21A57C0F000D581E /* SettingsListViewController.swift in Sources */,
 				0ED8993F21A57E70000D581E /* SettingsTableViewCell.swift in Sources */,
+				0EA7656321ACFF5300C13C13 /* SettingsHandler.swift in Sources */,
 				0ED8993B21A579F3000D581E /* SettingsObject.swift in Sources */,
 				0E5885D621A6BE2A00C0F9B8 /* DetailSettingsViewController.swift in Sources */,
 			);
