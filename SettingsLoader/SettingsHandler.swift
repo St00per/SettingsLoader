@@ -13,6 +13,37 @@ class SettingsHandler {
     
     var docRef: DocumentReference!
     
+    func downloadData(source: DataSource, onCompletion: @escaping ([SettingsObject])->Void) {
+        var settingsList = [SettingsObject]()
+        if source == .local {
+            guard let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("tashfjgk.json") else { return onCompletion([SettingsObject]())}
+            do {
+                let jsonData = try? Data(contentsOf: url)
+                guard let localData = jsonData else { return onCompletion([SettingsObject]())}
+                let settingsObject = try? JSONDecoder().decode(SettingsObject.self, from: localData)
+                
+                guard let createdObject = settingsObject else { return onCompletion([SettingsObject]())}
+                settingsList.append(createdObject)
+            }
+            return onCompletion(settingsList)
+        }
+        
+        if source == .cloud {
+            docRef = Firestore.firestore().collection("SettingsList").document("default_gain")
+            docRef.getDocument { (docSnapshot,error) in
+                guard let docSnapshot = docSnapshot, docSnapshot.exists else { return }
+                let myData = docSnapshot.data()
+                var settingsObject = SettingsObject()
+                settingsObject.preset_id = myData?["preset_id"] as? String ?? "(none)"
+                settingsObject.preset_name = myData?["preset_name"] as? String ?? "(none)"
+                settingsObject.type = myData?["type"] as? String ?? "(none)"
+                settingsObject.is_enabled = myData?["preset_id"] as? Bool ?? false
+                settingsList.append(settingsObject)
+                return onCompletion(settingsList)
+            }
+        }
+    }
+    
     func saveToLocalStorage(settingsObject: SettingsObject) {
         let jsonEncoder = JSONEncoder()
         do {
