@@ -69,4 +69,9 @@ class SettingsHandler {
             }
         }
     }
-}
+    
+    func deleteLocalPreset(named: String) {
+        guard let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("\(named).json") else { return }
+        try? FileManager.default.removeItem(at: url)
+        }
+    }

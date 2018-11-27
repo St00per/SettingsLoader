@@ -49,6 +49,11 @@ class SettingsListViewController: UIViewController {
         fillSettingsList()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(false)
+        fillSettingsList()
+    }
+    
     //Data receiving
     func fillSettingsList() {
         activityIndicator.isHidden = false
@@ -76,7 +81,6 @@ extension SettingsListViewController: UITableViewDelegate, UITableViewDataSource
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.name, for: indexPath) as? SettingsTableViewCell else {
             return UITableViewCell()
         }
-        
         cell.setLabel(settings: settingsList[indexPath.row])
         return cell
     }
