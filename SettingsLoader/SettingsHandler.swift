@@ -10,14 +10,46 @@ import Foundation
 import Firebase
 
 protocol SettingsHandlerDelegate {
-    func settingsLocalObject() -> Codable
-    func settingsCloudObject() -> Dictionary<String, Any>
+    func receivedLocalObject(data: Data) -> Codable
+    func receivedCloudObject(data: Dictionary<String, Any>) -> Codable
+    func dispatchedLocalObject<T : Codable>(data: T) -> Data
+    func dispatchedCloudObject<T : Codable>(data: T) -> Dictionary<String, Any>
 }
 
-class SettingsHandler {
+class SettingsHandler: SettingsHandlerDelegate {
     
     var collectionRef: CollectionReference!
     var docRef: DocumentReference!
+    
+    
+    func receivedLocalObject(data: Data) -> Codable {
+        let settingsObject = try? JSONDecoder().decode(SettingsObject.self, from: data)
+        return settingsObject
+    }
+    
+    func receivedCloudObject(data: Dictionary<String, Any>) -> Codable {
+        var settingsObject = SettingsObject()
+        settingsObject.preset_id = data["preset_id"] as? String ?? "(none)"
+        settingsObject.preset_name = data["preset_name"] as? String ?? "(none)"
+        settingsObject.type = data["type"] as? String ?? "(none)"
+        settingsObject.is_enabled = data["preset_id"] as? Bool ?? false
+        return settingsObject
+    }
+    
+    func dispatchedLocalObject<T : Codable>(data: T) -> Data {
+        let jsonData = try! JSONEncoder().encode(data)
+        return jsonData
+    }
+    
+    func dispatchedCloudObject<T : Codable>(data: T) -> Dictionary<String, Any> {
+        
+        let dataToSave: [String: Any] = try? JSONDecoder().encode(dataToSave, from: data) as? Dictionary[String;:Any]
+            //["preset_id": data.preset_id ?? "(none)",
+//                                         "preset_name": data.preset_name ?? "Unnamed",
+//                                         "is_enabled": String(data.is_enabled ?? false),
+//                                         "type": data.type ?? "(none)"]
+        return dataToSave
+    }
     
     func downloadData(source: DataSource, onCompletion: @escaping ([SettingsObject])->Void) {
         var settingsList = [SettingsObject]()
@@ -28,9 +60,10 @@ class SettingsHandler {
             guard let fileURLs = try? fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil) else { return onCompletion([SettingsObject]())}
             for url in fileURLs {
                 guard let jsonData = try? Data(contentsOf: url) else { continue }
-                let settingsObject = try? JSONDecoder().decode(SettingsObject.self, from: jsonData)
-                let createdObject = settingsObject
-                settingsList.append(createdObject ?? SettingsObject())
+                //let settingsObject = try? JSONDecoder().decode(SettingsObject.self, from: jsonData)
+                let settingsObject = receivedLocalObject(data: jsonData)
+                guard let createdObject = settingsObject as? SettingsObject else { continue }
+                settingsList.append(createdObject)
             }
             return onCompletion(settingsList)
         }
@@ -42,11 +75,8 @@ class SettingsHandler {
                 var settingsObject = SettingsObject()
                 for doc in docsSnapshot {
                 let myData = doc.data()
-                    settingsObject.preset_id = myData["preset_id"] as? String ?? "(none)"
-                    settingsObject.preset_name = myData["preset_name"] as? String ?? "(none)"
-                    settingsObject.type = myData["type"] as? String ?? "(none)"
-                    settingsObject.is_enabled = myData["preset_id"] as? Bool ?? false
-                    settingsList.append(settingsObject)
+                settingsObject = self.receivedCloudObject(data: myData) as? SettingsObject ?? SettingsObject()
+                settingsList.append(settingsObject)
                 }
                 return onCompletion(settingsList)
             }
@@ -54,9 +84,8 @@ class SettingsHandler {
     }
     
     func saveToLocalStorage(settingsObject: SettingsObject) {
-        let jsonEncoder = JSONEncoder()
         do {
-            let jsonData = try! jsonEncoder.encode(settingsObject)
+            let jsonData = dispatchedLocalObject(data: settingsObject)
             let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("\((settingsObject.preset_name ?? "Unnamed")).json")
             guard let writeUrl = url else { return }
             try? jsonData.write(to: writeUrl)
@@ -65,10 +94,7 @@ class SettingsHandler {
     
     func saveToCloudStore(settingsObject: SettingsObject) {
         docRef = Firestore.firestore().collection("SettingsList").document(settingsObject.preset_name ?? "Unnamed")
-        let dataToSave: [String: Any] = ["preset_id": settingsObject.preset_id ?? "(none)",
-                                         "preset_name": settingsObject.preset_name ?? "Unnamed",
-                                         "is_enabled": String(settingsObject.is_enabled ?? false),
-                                         "type": settingsObject.type ?? "(none)"]
+        let dataToSave: [String: Any] = dispatchedCloudObject(data: settingsObject)
         docRef.setData(dataToSave) { (error) in
             if let error = error {
                 print ("ERROR: \(error.localizedDescription)")
