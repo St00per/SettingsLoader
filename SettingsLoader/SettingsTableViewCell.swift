@@ -11,7 +11,9 @@ import UIKit
 class SettingsTableViewCell: UITableViewCell {
 
     static let name = String(describing: SettingsTableViewCell.self)
+    var settingsListController: SettingsListViewController?
     var presetName: String?
+    
     
     @IBOutlet weak var presetNameLabel: UILabel!
     
@@ -19,6 +21,7 @@ class SettingsTableViewCell: UITableViewCell {
         guard let deletingPreset = presetName else { return }
         let settingsHandler = SettingsHandler()
         settingsHandler.deleteLocalPreset(named: deletingPreset)
+        settingsListController?.fillSettingsList()
     }
     
     override func awakeFromNib() {

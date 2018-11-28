@@ -81,6 +81,7 @@ extension SettingsListViewController: UITableViewDelegate, UITableViewDataSource
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.name, for: indexPath) as? SettingsTableViewCell else {
             return UITableViewCell()
         }
+        cell.settingsListController = self
         cell.setLabel(settings: settingsList[indexPath.row])
         return cell
     }
