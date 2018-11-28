@@ -18,10 +18,21 @@ class SettingsTableViewCell: UITableViewCell {
     @IBOutlet weak var presetNameLabel: UILabel!
     
     @IBAction func deletePreset(_ sender: UIButton) {
-        guard let deletingPreset = presetName, let dataSource = settingsListController?.dataSource else { return }
-        let settingsHandler = SettingsHandler()
-        settingsHandler.deleteLocalPreset(named: deletingPreset, dataSource: dataSource)
-        settingsListController?.fillSettingsList()
+        let alert = UIAlertController(title: "WARNING", message: "Delete this file?", preferredStyle: .alert)
+        let ok = UIAlertAction(title: "Ok", style: .default) { (action) in
+            alert.dismiss(animated: true, completion: nil)
+            guard let deletingPreset = self.presetName, let dataSource = self.settingsListController?.dataSource else { return }
+            let settingsHandler = SettingsHandler()
+            settingsHandler.deleteLocalPreset(named: deletingPreset, dataSource: dataSource)
+            self.settingsListController?.fillSettingsList()
+        }
+        let cancel = UIAlertAction(title: "Cancel",
+                                         style: .cancel) {(_) in
+                                            alert.dismiss(animated: true, completion: nil)
+        }
+        alert.addAction(ok)
+        alert.addAction(cancel)
+        settingsListController?.present(alert, animated: true, completion: nil)
     }
     
     override func awakeFromNib() {

@@ -9,6 +9,11 @@
 import Foundation
 import Firebase
 
+protocol SettingsHandlerDelegate {
+    func settingsLocalObject() -> Codable
+    func settingsCloudObject() -> Dictionary<String, Any>
+}
+
 class SettingsHandler {
     
     var collectionRef: CollectionReference!
