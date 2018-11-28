@@ -11,6 +11,7 @@ import Firebase
 
 class SettingsHandler {
     
+    var collectionRef: CollectionReference!
     var docRef: DocumentReference!
     
     func downloadData(source: DataSource, onCompletion: @escaping ([SettingsObject])->Void) {
@@ -30,16 +31,18 @@ class SettingsHandler {
         }
         
         if source == .cloud {
-            docRef = Firestore.firestore().collection("SettingsList").document("default_gain")
-            docRef.getDocument { (docSnapshot,error) in
-                guard let docSnapshot = docSnapshot, docSnapshot.exists else { return }
-                let myData = docSnapshot.data()
+            collectionRef = Firestore.firestore().collection("SettingsList")
+            collectionRef.getDocuments { (docsSnapshot, error) in
+                guard let docsSnapshot = docsSnapshot?.documents, docsSnapshot.count != 0 else { return }
                 var settingsObject = SettingsObject()
-                settingsObject.preset_id = myData?["preset_id"] as? String ?? "(none)"
-                settingsObject.preset_name = myData?["preset_name"] as? String ?? "(none)"
-                settingsObject.type = myData?["type"] as? String ?? "(none)"
-                settingsObject.is_enabled = myData?["preset_id"] as? Bool ?? false
-                settingsList.append(settingsObject)
+                for doc in docsSnapshot {
+                let myData = doc.data()
+                    settingsObject.preset_id = myData["preset_id"] as? String ?? "(none)"
+                    settingsObject.preset_name = myData["preset_name"] as? String ?? "(none)"
+                    settingsObject.type = myData["type"] as? String ?? "(none)"
+                    settingsObject.is_enabled = myData["preset_id"] as? Bool ?? false
+                    settingsList.append(settingsObject)
+                }
                 return onCompletion(settingsList)
             }
         }
