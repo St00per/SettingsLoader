@@ -73,8 +73,16 @@ class SettingsHandler {
         }
     }
     
-    func deleteLocalPreset(named: String) {
+    func deleteLocalPreset(named: String, dataSource: DataSource) {
+        
+        if dataSource == .local {
         guard let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("\(named).json") else { return }
         try? FileManager.default.removeItem(at: url)
+        }
+        
+        if dataSource == .cloud {
+            docRef = Firestore.firestore().collection("SettingsList").document(named)
+            docRef.delete()
+            }
         }
     }

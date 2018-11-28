@@ -18,9 +18,9 @@ class SettingsTableViewCell: UITableViewCell {
     @IBOutlet weak var presetNameLabel: UILabel!
     
     @IBAction func deletePreset(_ sender: UIButton) {
-        guard let deletingPreset = presetName else { return }
+        guard let deletingPreset = presetName, let dataSource = settingsListController?.dataSource else { return }
         let settingsHandler = SettingsHandler()
-        settingsHandler.deleteLocalPreset(named: deletingPreset)
+        settingsHandler.deleteLocalPreset(named: deletingPreset, dataSource: dataSource)
         settingsListController?.fillSettingsList()
     }
     
