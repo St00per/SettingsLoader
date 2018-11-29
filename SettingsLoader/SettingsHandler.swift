@@ -37,17 +37,13 @@ class SettingsHandler: SettingsHandlerDelegate {
     }
     
     func dispatchedLocalObject<T : Codable>(data: T) -> Data {
-        let jsonData = try! JSONEncoder().encode(data)
+        guard let jsonData = try? JSONEncoder().encode(data) else { return Data()}
         return jsonData
     }
     
     func dispatchedCloudObject<T : Codable>(data: T) -> Dictionary<String, Any> {
         
-        let dataToSave: [String: Any] = try? JSONDecoder().encode(dataToSave, from: data) as? Dictionary[String;:Any]
-            //["preset_id": data.preset_id ?? "(none)",
-//                                         "preset_name": data.preset_name ?? "Unnamed",
-//                                         "is_enabled": String(data.is_enabled ?? false),
-//                                         "type": data.type ?? "(none)"]
+        guard let dataToSave = data.dictionary else { return ["":0] }
         return dataToSave
     }
     
@@ -60,7 +56,6 @@ class SettingsHandler: SettingsHandlerDelegate {
             guard let fileURLs = try? fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil) else { return onCompletion([SettingsObject]())}
             for url in fileURLs {
                 guard let jsonData = try? Data(contentsOf: url) else { continue }
-                //let settingsObject = try? JSONDecoder().decode(SettingsObject.self, from: jsonData)
                 let settingsObject = receivedLocalObject(data: jsonData)
                 guard let createdObject = settingsObject as? SettingsObject else { continue }
                 settingsList.append(createdObject)
