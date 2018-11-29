@@ -36,7 +36,7 @@ class DetailSettingsViewController: UIViewController {
     @IBAction func saveLocalButton(_ sender: Any) {
         
         let settingsObject: SettingsObject = SettingsObject(preset_id: presetIDTextField.text ?? "(none)", preset_name: presetNameTextField.text ?? "Unnamed", is_enabled: presetEnableSwitch.isOn, preset_type: nil, type: presetTypeTextField.text ?? "(none)", parameters: nil)
-        let settingsToSave = settingsHandler.dispatchedLocalObject(data: settingsObject)
+        let settingsToSave = dispatchedLocalObject(data: settingsObject)
         settingsHandler.saveToLocalStorage(data: settingsToSave, filename: presetNameTextField.text ?? "Unnamed")
         
         self.dismiss(animated: true)
@@ -46,7 +46,7 @@ class DetailSettingsViewController: UIViewController {
     @IBAction func saveToCloudButton(_ sender: Any) {
 
         let settingsObject: SettingsObject = SettingsObject(preset_id: presetIDTextField.text ?? "(none)", preset_name: presetNameTextField.text ?? "Unnamed", is_enabled: presetEnableSwitch.isOn, preset_type: nil, type: presetTypeTextField.text ?? "(none)", parameters: nil)
-        let settingsToSave = settingsHandler.dispatchedCloudObject(data: settingsObject)
+        let settingsToSave = dispatchedCloudObject(data: settingsObject)
         settingsHandler.saveToCloudStore(data: settingsToSave, filename: presetNameTextField.text ?? "Unnamed")
         self.dismiss(animated: true)
     }
@@ -56,5 +56,16 @@ class DetailSettingsViewController: UIViewController {
         presetNameTextField.text = selectedSettings?.preset_name
         presetTypeTextField.text = selectedSettings?.type
         presetEnableSwitch.isOn = selectedSettings?.is_enabled ?? false
+    }
+}
+extension DetailSettingsViewController: SettingsHandlerDispatchDelegate {
+    func dispatchedLocalObject<T>(data: T) -> Data where T : Decodable, T : Encodable {
+        guard let jsonData = try? JSONEncoder().encode(data) else { return Data()}
+        return jsonData
+    }
+    
+    func dispatchedCloudObject<T>(data: T) -> Dictionary<String, Any> where T : Decodable, T : Encodable {
+        guard let dataToSave = data.dictionary else { return ["":0] }
+        return dataToSave
     }
 }

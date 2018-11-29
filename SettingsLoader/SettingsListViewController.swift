@@ -108,7 +108,7 @@ extension SettingsListViewController: UITableViewDelegate, UITableViewDataSource
         show(desVC, sender: nil)
     }
 }
-extension SettingsListViewController: SettingsHandlerDelegate {
+extension SettingsListViewController: SettingsHandlerReceiveDelegate {
     
     func receivedLocalObject(data: Data) -> Codable {
         let settingsObject = try? JSONDecoder().decode(SettingsObject.self, from: data)
@@ -123,16 +123,4 @@ extension SettingsListViewController: SettingsHandlerDelegate {
         settingsObject.is_enabled = data["preset_id"] as? Bool ?? false
         return settingsObject
     }
-    
-    func dispatchedLocalObject<T>(data: T) -> Data where T : Decodable, T : Encodable {
-        guard let jsonData = try? JSONEncoder().encode(data) else { return Data()}
-        return jsonData
-    }
-    
-    func dispatchedCloudObject<T>(data: T) -> Dictionary<String, Any> where T : Decodable, T : Encodable {
-        guard let dataToSave = data.dictionary else { return ["":0] }
-        return dataToSave
-    }
-    
-    
 }

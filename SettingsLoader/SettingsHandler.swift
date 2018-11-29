@@ -9,9 +9,12 @@
 import Foundation
 import Firebase
 
-protocol SettingsHandlerDelegate {
+protocol SettingsHandlerReceiveDelegate {
     func receivedLocalObject(data: Data) -> Codable
     func receivedCloudObject(data: Dictionary<String, Any>) -> Codable
+}
+
+protocol SettingsHandlerDispatchDelegate {
     func dispatchedLocalObject<T : Codable>(data: T) -> Data
     func dispatchedCloudObject<T : Codable>(data: T) -> Dictionary<String, Any>
 }
@@ -31,8 +34,6 @@ class SettingsHandler {
             guard let fileURLs = try? fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil) else { return onCompletion([Data]())}
             for url in fileURLs {
                 guard let jsonData = try? Data(contentsOf: url) else { continue }
-//                let dataObject = receivedLocalObject(data: jsonData)
-//                guard let createdObject = dataObject as? Codable else { continue }
                 dataList.append(jsonData)
             }
             return onCompletion(dataList)
@@ -45,7 +46,6 @@ class SettingsHandler {
                 guard let docsSnapshot = docsSnapshot?.documents, docsSnapshot.count != 0 else { return }
                 for doc in docsSnapshot {
                 let myData = doc.data()
-//                settingsObject = self.receivedCloudObject(data: myData) as? SettingsObject ?? SettingsObject()
                 dictionaryList.append(myData)
                 }
                 return onCompletion(dictionaryList)
