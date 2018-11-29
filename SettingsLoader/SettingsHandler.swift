@@ -78,19 +78,19 @@ class SettingsHandler: SettingsHandlerDelegate {
         }
     }
     
-    func saveToLocalStorage(settingsObject: SettingsObject) {
+    func saveToLocalStorage(data: Data, filename: String) {
         do {
-            let jsonData = dispatchedLocalObject(data: settingsObject)
-            let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("\((settingsObject.preset_name ?? "Unnamed")).json")
+            let jsonData = data//dispatchedLocalObject(data: settingsObject)
+            let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("\(filename).json")
             guard let writeUrl = url else { return }
             try? jsonData.write(to: writeUrl)
         }
     }
     
-    func saveToCloudStore(settingsObject: SettingsObject) {
-        docRef = Firestore.firestore().collection("SettingsList").document(settingsObject.preset_name ?? "Unnamed")
-        let dataToSave: [String: Any] = dispatchedCloudObject(data: settingsObject)
-        docRef.setData(dataToSave) { (error) in
+    func saveToCloudStore(data: [String: Any], filename: String) {
+        docRef = Firestore.firestore().collection("SettingsList").document(filename)
+        //let dataToSave: [String: Any] = dispatchedCloudObject(data: data)
+        docRef.setData(data) { (error) in
             if let error = error {
                 print ("ERROR: \(error.localizedDescription)")
             } else{

@@ -35,8 +35,9 @@ class DetailSettingsViewController: UIViewController {
     //Save changes to local storage
     @IBAction func saveLocalButton(_ sender: Any) {
         
-        let settingsToSave: SettingsObject = SettingsObject(preset_id: presetIDTextField.text ?? "(none)", preset_name: presetNameTextField.text ?? "Unnamed", is_enabled: presetEnableSwitch.isOn, preset_type: nil, type: presetTypeTextField.text ?? "(none)", parameters: nil)
-        settingsHandler.saveToLocalStorage(settingsObject: settingsToSave)
+        let settingsObject: SettingsObject = SettingsObject(preset_id: presetIDTextField.text ?? "(none)", preset_name: presetNameTextField.text ?? "Unnamed", is_enabled: presetEnableSwitch.isOn, preset_type: nil, type: presetTypeTextField.text ?? "(none)", parameters: nil)
+        let settingsToSave = settingsHandler.dispatchedLocalObject(data: settingsObject)
+        settingsHandler.saveToLocalStorage(data: settingsToSave, filename: presetNameTextField.text ?? "Unnamed")
         
         self.dismiss(animated: true)
     }
@@ -44,9 +45,9 @@ class DetailSettingsViewController: UIViewController {
     //Save changes to cloud storage
     @IBAction func saveToCloudButton(_ sender: Any) {
 
-        let settingsToSave: SettingsObject = SettingsObject(preset_id: presetIDTextField.text ?? "(none)", preset_name: presetNameTextField.text ?? "Unnamed", is_enabled: presetEnableSwitch.isOn, preset_type: nil, type: presetTypeTextField.text ?? "(none)", parameters: nil)
-        
-        settingsHandler.saveToCloudStore(settingsObject: settingsToSave)
+        let settingsObject: SettingsObject = SettingsObject(preset_id: presetIDTextField.text ?? "(none)", preset_name: presetNameTextField.text ?? "Unnamed", is_enabled: presetEnableSwitch.isOn, preset_type: nil, type: presetTypeTextField.text ?? "(none)", parameters: nil)
+        let settingsToSave = settingsHandler.dispatchedCloudObject(data: settingsObject)
+        settingsHandler.saveToCloudStore(data: settingsToSave, filename: presetNameTextField.text ?? "Unnamed")
         self.dismiss(animated: true)
     }
     
