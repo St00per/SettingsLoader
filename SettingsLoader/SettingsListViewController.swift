@@ -60,7 +60,19 @@ class SettingsListViewController: UIViewController {
         activityIndicator.startAnimating()
         settingsList = []
         settingsHandler.downloadData(source: dataSource) { (downloadedData) in
-            self.settingsList = downloadedData
+            if self.dataSource == .local {
+                for data in downloadedData {
+                    let settingsObject = self.receivedLocalObject(data: data as! Data)
+                    self.settingsList.append(settingsObject as! SettingsObject)
+                }
+            }
+            if self.dataSource == .cloud {
+                for data in downloadedData {
+                    let settingsObject = self.receivedCloudObject(data: data as! [String:Any])
+                    self.settingsList.append(settingsObject as! SettingsObject)
+                }
+            }
+            
             DispatchQueue.main.async {
                 self.settingsTable.reloadData()
                 self.activityIndicator.stopAnimating()
@@ -95,4 +107,32 @@ extension SettingsListViewController: UITableViewDelegate, UITableViewDataSource
         desVC.selectedSettings = settingsList[indexPath.row]
         show(desVC, sender: nil)
     }
+}
+extension SettingsListViewController: SettingsHandlerDelegate {
+    
+    func receivedLocalObject(data: Data) -> Codable {
+        let settingsObject = try? JSONDecoder().decode(SettingsObject.self, from: data)
+        return settingsObject
+    }
+    
+    func receivedCloudObject(data: Dictionary<String, Any>) -> Codable {
+        var settingsObject = SettingsObject()
+        settingsObject.preset_id = data["preset_id"] as? String ?? "(none)"
+        settingsObject.preset_name = data["preset_name"] as? String ?? "(none)"
+        settingsObject.type = data["type"] as? String ?? "(none)"
+        settingsObject.is_enabled = data["preset_id"] as? Bool ?? false
+        return settingsObject
+    }
+    
+    func dispatchedLocalObject<T>(data: T) -> Data where T : Decodable, T : Encodable {
+        guard let jsonData = try? JSONEncoder().encode(data) else { return Data()}
+        return jsonData
+    }
+    
+    func dispatchedCloudObject<T>(data: T) -> Dictionary<String, Any> where T : Decodable, T : Encodable {
+        guard let dataToSave = data.dictionary else { return ["":0] }
+        return dataToSave
+    }
+    
+    
 }

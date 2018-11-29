@@ -16,71 +16,46 @@ protocol SettingsHandlerDelegate {
     func dispatchedCloudObject<T : Codable>(data: T) -> Dictionary<String, Any>
 }
 
-class SettingsHandler: SettingsHandlerDelegate {
+class SettingsHandler {
     
     var collectionRef: CollectionReference!
     var docRef: DocumentReference!
+  
     
-    
-    func receivedLocalObject(data: Data) -> Codable {
-        let settingsObject = try? JSONDecoder().decode(SettingsObject.self, from: data)
-        return settingsObject
-    }
-    
-    func receivedCloudObject(data: Dictionary<String, Any>) -> Codable {
-        var settingsObject = SettingsObject()
-        settingsObject.preset_id = data["preset_id"] as? String ?? "(none)"
-        settingsObject.preset_name = data["preset_name"] as? String ?? "(none)"
-        settingsObject.type = data["type"] as? String ?? "(none)"
-        settingsObject.is_enabled = data["preset_id"] as? Bool ?? false
-        return settingsObject
-    }
-    
-    func dispatchedLocalObject<T : Codable>(data: T) -> Data {
-        guard let jsonData = try? JSONEncoder().encode(data) else { return Data()}
-        return jsonData
-    }
-    
-    func dispatchedCloudObject<T : Codable>(data: T) -> Dictionary<String, Any> {
-        
-        guard let dataToSave = data.dictionary else { return ["":0] }
-        return dataToSave
-    }
-    
-    func downloadData(source: DataSource, onCompletion: @escaping ([SettingsObject])->Void) {
-        var settingsList = [SettingsObject]()
+    func downloadData(source: DataSource, onCompletion: @escaping ([Any])->Void) {
+        var dataList = [Data]()
         if source == .local {
             
             let fileManager = FileManager.default
             let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            guard let fileURLs = try? fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil) else { return onCompletion([SettingsObject]())}
+            guard let fileURLs = try? fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil) else { return onCompletion([Data]())}
             for url in fileURLs {
                 guard let jsonData = try? Data(contentsOf: url) else { continue }
-                let settingsObject = receivedLocalObject(data: jsonData)
-                guard let createdObject = settingsObject as? SettingsObject else { continue }
-                settingsList.append(createdObject)
+//                let dataObject = receivedLocalObject(data: jsonData)
+//                guard let createdObject = dataObject as? Codable else { continue }
+                dataList.append(jsonData)
             }
-            return onCompletion(settingsList)
+            return onCompletion(dataList)
         }
         
         if source == .cloud {
+            var dictionaryList = [[String: Any]]()
             collectionRef = Firestore.firestore().collection("SettingsList")
             collectionRef.getDocuments { (docsSnapshot, error) in
                 guard let docsSnapshot = docsSnapshot?.documents, docsSnapshot.count != 0 else { return }
-                var settingsObject = SettingsObject()
                 for doc in docsSnapshot {
                 let myData = doc.data()
-                settingsObject = self.receivedCloudObject(data: myData) as? SettingsObject ?? SettingsObject()
-                settingsList.append(settingsObject)
+//                settingsObject = self.receivedCloudObject(data: myData) as? SettingsObject ?? SettingsObject()
+                dictionaryList.append(myData)
                 }
-                return onCompletion(settingsList)
+                return onCompletion(dictionaryList)
             }
         }
     }
     
     func saveToLocalStorage(data: Data, filename: String) {
         do {
-            let jsonData = data//dispatchedLocalObject(data: settingsObject)
+            let jsonData = data
             let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("\(filename).json")
             guard let writeUrl = url else { return }
             try? jsonData.write(to: writeUrl)
@@ -89,7 +64,6 @@ class SettingsHandler: SettingsHandlerDelegate {
     
     func saveToCloudStore(data: [String: Any], filename: String) {
         docRef = Firestore.firestore().collection("SettingsList").document(filename)
-        //let dataToSave: [String: Any] = dispatchedCloudObject(data: data)
         docRef.setData(data) { (error) in
             if let error = error {
                 print ("ERROR: \(error.localizedDescription)")
