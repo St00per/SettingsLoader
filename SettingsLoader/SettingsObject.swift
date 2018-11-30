@@ -21,7 +21,12 @@ struct SettingsObject: Codable {
     var type: String?
     let parameters: Parameters?
     
-    init(preset_id: String? = nil, preset_name: String? = nil, is_enabled: Bool? = nil, preset_type: String? = nil, type: String? = nil, parameters: Parameters? = nil
+    init(preset_id: String? = nil,
+         preset_name: String? = nil,
+         is_enabled: Bool? = nil,
+         preset_type: String? = nil,
+         type: String? = nil,
+         parameters: Parameters? = nil
          ) {
         self.preset_id = preset_id
         self.preset_name = preset_name

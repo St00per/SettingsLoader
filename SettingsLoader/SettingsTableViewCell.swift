@@ -14,7 +14,6 @@ class SettingsTableViewCell: UITableViewCell {
     var settingsListController: SettingsListViewController?
     var presetName: String?
     
-    
     @IBOutlet weak var presetNameLabel: UILabel!
     
     @IBAction func deletePreset(_ sender: UIButton) {
@@ -22,8 +21,8 @@ class SettingsTableViewCell: UITableViewCell {
         let ok = UIAlertAction(title: "Ok", style: .default) { (action) in
             alert.dismiss(animated: true, completion: nil)
             guard let deletingPreset = self.presetName, let dataSource = self.settingsListController?.dataSource else { return }
-            let settingsHandler = SettingsHandler()
-            settingsHandler.deleteLocalPreset(named: deletingPreset, dataSource: dataSource)
+           
+            SettingsHandler.default.deleteLocalPreset(named: deletingPreset, dataSource: dataSource)
             self.settingsListController?.fillSettingsList()
         }
         let cancel = UIAlertAction(title: "Cancel",
@@ -35,11 +34,6 @@ class SettingsTableViewCell: UITableViewCell {
         settingsListController?.present(alert, animated: true, completion: nil)
     }
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
     func setLabel(settings: SettingsObject) {
         presetNameLabel.text = settings.preset_name
         presetName = settings.preset_name

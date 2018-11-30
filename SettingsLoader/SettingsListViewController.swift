@@ -8,14 +8,8 @@
 
 import UIKit
 
-enum DataSource {
-    case local
-    case cloud
-}
-
 class SettingsListViewController: UIViewController {
     
-    let settingsHandler = SettingsHandler()
     var settingsList: [SettingsObject] = []
     var dataSource: DataSource = .local
     
@@ -59,17 +53,17 @@ class SettingsListViewController: UIViewController {
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()
         settingsList = []
-        settingsHandler.downloadData(source: dataSource) { (downloadedData) in
+        SettingsHandler.default.downloadData(source: dataSource) { (downloadedData) in
             if self.dataSource == .local {
                 for data in downloadedData {
-                    let settingsObject = self.receivedLocalObject(data: data as! Data)
-                    self.settingsList.append(settingsObject as! SettingsObject)
+                    let settingsObject = self.receivedLocalObject(data: data as? Data ?? Data())
+                    self.settingsList.append(settingsObject as? SettingsObject ?? SettingsObject())
                 }
             }
             if self.dataSource == .cloud {
                 for data in downloadedData {
-                    let settingsObject = self.receivedCloudObject(data: data as! [String:Any])
-                    self.settingsList.append(settingsObject as! SettingsObject)
+                    let settingsObject = self.receivedCloudObject(data: data as? [String:Any] ?? [String:Any]())
+                    self.settingsList.append(settingsObject as? SettingsObject ?? SettingsObject())
                 }
             }
             

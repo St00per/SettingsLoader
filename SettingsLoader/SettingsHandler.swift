@@ -19,19 +19,34 @@ protocol SettingsHandlerDispatchDelegate {
     func dispatchedCloudObject<T : Codable>(data: T) -> Dictionary<String, Any>
 }
 
+enum DataSource {
+    case local
+    case cloud
+}
+
 class SettingsHandler {
+    
+    static let `default` = SettingsHandler()
     
     var collectionRef: CollectionReference!
     var docRef: DocumentReference!
   
+    func configure() {
+        FirebaseApp.configure()
+    }
+    
+    func setReference(collectionName: String) {
+        self.collectionRef = Firestore.firestore().collection("\(collectionName)")
+    }
     
     func downloadData(source: DataSource, onCompletion: @escaping ([Any])->Void) {
-        var dataList = [Data]()
+        
         if source == .local {
-            
+            var dataList = [Data]()
             let fileManager = FileManager.default
             let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            guard let fileURLs = try? fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil) else { return onCompletion([Data]())}
+            guard let fileURLs = try? fileManager.contentsOfDirectory(at: documentsURL,
+                                                                      includingPropertiesForKeys: nil) else { return onCompletion([Data]())}
             for url in fileURLs {
                 guard let jsonData = try? Data(contentsOf: url) else { continue }
                 dataList.append(jsonData)
@@ -53,22 +68,25 @@ class SettingsHandler {
         }
     }
     
-    func saveToLocalStorage(data: Data, filename: String) {
-        do {
-            let jsonData = data
-            let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("\(filename).json")
+    func saveData(dataSource: DataSource, localData: Data?, cloudData: [String: Any]?, filename: String) {
+        if dataSource == .local {
+            guard let jsonData = localData else { return }
+            let fileManager = FileManager.default
+            let url = fileManager.urls(for: .documentDirectory,
+                                       in: .userDomainMask).first?.appendingPathComponent("\(filename).json")
             guard let writeUrl = url else { return }
             try? jsonData.write(to: writeUrl)
         }
-    }
-    
-    func saveToCloudStore(data: [String: Any], filename: String) {
-        docRef = Firestore.firestore().collection("SettingsList").document(filename)
-        docRef.setData(data) { (error) in
-            if let error = error {
-                print ("ERROR: \(error.localizedDescription)")
-            } else{
-                print ("Data succefully saved")
+        
+        if dataSource == .cloud {
+            docRef = Firestore.firestore().collection("SettingsList").document(filename)
+            guard let cloudDataToSave = cloudData else { return }
+            docRef.setData(cloudDataToSave) { (error) in
+                if let error = error {
+                    print ("ERROR: \(error.localizedDescription)")
+                } else{
+                    print ("Data succefully saved")
+                }
             }
         }
     }
@@ -76,8 +94,11 @@ class SettingsHandler {
     func deleteLocalPreset(named: String, dataSource: DataSource) {
         
         if dataSource == .local {
-        guard let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("\(named).json") else { return }
-        try? FileManager.default.removeItem(at: url)
+        let fileManager = FileManager.default
+        guard let url = fileManager.urls(for: .documentDirectory,
+                                         in: .userDomainMask).first else { return }
+        let appendedUrl = url.appendingPathComponent("\(named).json")
+        try? FileManager.default.removeItem(at: appendedUrl)
         }
         
         if dataSource == .cloud {

@@ -13,7 +13,6 @@ class DetailSettingsViewController: UIViewController {
     
     var selectedSettings: SettingsObject?
     
-    let settingsHandler = SettingsHandler()
     @IBOutlet weak var presetIDTextField: UITextField!
     @IBOutlet weak var presetNameTextField: UITextField!
     @IBOutlet weak var presetTypeTextField: UITextField!
@@ -21,10 +20,6 @@ class DetailSettingsViewController: UIViewController {
     
     @IBAction func `return`(_ sender: UIButton) {
         self.dismiss(animated: true)
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -35,9 +30,17 @@ class DetailSettingsViewController: UIViewController {
     //Save changes to local storage
     @IBAction func saveLocalButton(_ sender: Any) {
         
-        let settingsObject: SettingsObject = SettingsObject(preset_id: presetIDTextField.text ?? "(none)", preset_name: presetNameTextField.text ?? "Unnamed", is_enabled: presetEnableSwitch.isOn, preset_type: nil, type: presetTypeTextField.text ?? "(none)", parameters: nil)
+        let settingsObject: SettingsObject = SettingsObject(preset_id: presetIDTextField.text ?? "(none)",
+                                                            preset_name: presetNameTextField.text ?? "Unnamed",
+                                                            is_enabled: presetEnableSwitch.isOn,
+                                                            preset_type: nil,
+                                                            type: presetTypeTextField.text ?? "(none)",
+                                                            parameters: nil)
         let settingsToSave = dispatchedLocalObject(data: settingsObject)
-        settingsHandler.saveToLocalStorage(data: settingsToSave, filename: presetNameTextField.text ?? "Unnamed")
+        SettingsHandler.default.saveData(dataSource: .local,
+                                         localData: settingsToSave,
+                                         cloudData: nil,
+                                         filename: presetNameTextField.text ?? "Unnamed")
         
         self.dismiss(animated: true)
     }
@@ -45,9 +48,17 @@ class DetailSettingsViewController: UIViewController {
     //Save changes to cloud storage
     @IBAction func saveToCloudButton(_ sender: Any) {
 
-        let settingsObject: SettingsObject = SettingsObject(preset_id: presetIDTextField.text ?? "(none)", preset_name: presetNameTextField.text ?? "Unnamed", is_enabled: presetEnableSwitch.isOn, preset_type: nil, type: presetTypeTextField.text ?? "(none)", parameters: nil)
+        let settingsObject: SettingsObject = SettingsObject(preset_id: presetIDTextField.text ?? "(none)",
+                                                            preset_name: presetNameTextField.text ?? "Unnamed",
+                                                            is_enabled: presetEnableSwitch.isOn,
+                                                            preset_type: nil,
+                                                            type: presetTypeTextField.text ?? "(none)",
+                                                            parameters: nil)
         let settingsToSave = dispatchedCloudObject(data: settingsObject)
-        settingsHandler.saveToCloudStore(data: settingsToSave, filename: presetNameTextField.text ?? "Unnamed")
+        SettingsHandler.default.saveData(dataSource: .cloud,
+                                         localData: nil,
+                                         cloudData: settingsToSave,
+                                         filename: presetNameTextField.text ?? "Unnamed")
         self.dismiss(animated: true)
     }
     
@@ -59,6 +70,7 @@ class DetailSettingsViewController: UIViewController {
     }
 }
 extension DetailSettingsViewController: SettingsHandlerDispatchDelegate {
+    
     func dispatchedLocalObject<T>(data: T) -> Data where T : Decodable, T : Encodable {
         guard let jsonData = try? JSONEncoder().encode(data) else { return Data()}
         return jsonData
