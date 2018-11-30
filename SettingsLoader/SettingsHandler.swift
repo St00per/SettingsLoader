@@ -3,7 +3,7 @@
 //  SettingsLoader
 //
 //  Created by Kirill Shteffen on 27/11/2018.
-//  Copyright © 2018 Кирилл Штеффен. All rights reserved.
+//  Copyright © 2018 Kirill Shteffen. All rights reserved.
 //
 
 import Foundation
@@ -58,7 +58,7 @@ class SettingsHandler {
             var dictionaryList = [[String: Any]]()
             collectionRef = Firestore.firestore().collection("SettingsList")
             collectionRef.getDocuments { (docsSnapshot, error) in
-                guard let docsSnapshot = docsSnapshot?.documents, docsSnapshot.count != 0 else { return }
+                guard let docsSnapshot = docsSnapshot?.documents else { return }
                 for doc in docsSnapshot {
                 let myData = doc.data()
                 dictionaryList.append(myData)

@@ -3,7 +3,7 @@
 //  SettingsLoader
 //
 //  Created by Kirill Shteffen on 22/11/2018.
-//  Copyright © 2018 Кирилл Штеффен. All rights reserved.
+//  Copyright © 2018 Kirill Shteffen. All rights reserved.
 //
 
 import UIKit
