@@ -56,7 +56,6 @@ class SettingsHandler {
         
         if source == .cloud {
             var dictionaryList = [[String: Any]]()
-            collectionRef = Firestore.firestore().collection("SettingsList")
             collectionRef.getDocuments { (docsSnapshot, error) in
                 guard let docsSnapshot = docsSnapshot?.documents else { return }
                 for doc in docsSnapshot {
@@ -79,7 +78,7 @@ class SettingsHandler {
         }
         
         if dataSource == .cloud {
-            docRef = Firestore.firestore().collection("SettingsList").document(filename)
+            docRef = collectionRef.document(filename)
             guard let cloudDataToSave = cloudData else { return }
             docRef.setData(cloudDataToSave) { (error) in
                 if let error = error {
@@ -102,7 +101,7 @@ class SettingsHandler {
         }
         
         if dataSource == .cloud {
-            docRef = Firestore.firestore().collection("SettingsList").document(named)
+            docRef = collectionRef.document(named)
             docRef.delete()
             }
         }
