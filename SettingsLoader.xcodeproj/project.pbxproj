@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		0E5885D421A6B54400C0F9B8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0E5885D321A6B54400C0F9B8 /* GoogleService-Info.plist */; };
 		0E5885D621A6BE2A00C0F9B8 /* DetailSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E5885D521A6BE2A00C0F9B8 /* DetailSettingsViewController.swift */; };
-		0EA7656321ACFF5300C13C13 /* SettingsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA7656221ACFF5300C13C13 /* SettingsHandler.swift */; };
 		0ED8990D21A577F7000D581E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ED8990C21A577F7000D581E /* AppDelegate.swift */; };
 		0ED8991221A577F7000D581E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0ED8991021A577F7000D581E /* Main.storyboard */; };
 		0ED8991421A5780A000D581E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0ED8991321A5780A000D581E /* Assets.xcassets */; };
@@ -44,7 +43,6 @@
 /* Begin PBXFileReference section */
 		0E5885D321A6B54400C0F9B8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		0E5885D521A6BE2A00C0F9B8 /* DetailSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailSettingsViewController.swift; sourceTree = "<group>"; };
-		0EA7656221ACFF5300C13C13 /* SettingsHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsHandler.swift; sourceTree = "<group>"; };
 		0ED8990921A577F7000D581E /* SettingsLoader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SettingsLoader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0ED8990C21A577F7000D581E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0ED8991121A577F7000D581E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -128,7 +126,6 @@
 				0ED8993E21A57E70000D581E /* SettingsTableViewCell.swift */,
 				0E5885D521A6BE2A00C0F9B8 /* DetailSettingsViewController.swift */,
 				0ED8993A21A579F3000D581E /* SettingsObject.swift */,
-				0EA7656221ACFF5300C13C13 /* SettingsHandler.swift */,
 				0ED8990C21A577F7000D581E /* AppDelegate.swift */,
 				0ED8991021A577F7000D581E /* Main.storyboard */,
 				0E5885D321A6B54400C0F9B8 /* GoogleService-Info.plist */,
@@ -192,6 +189,7 @@
 				0ED8990621A577F7000D581E /* Frameworks */,
 				0ED8990721A577F7000D581E /* Resources */,
 				6C5EE0EC6E09369D54747E50 /* [CP] Embed Pods Frameworks */,
+				4D3C350694BD76D0E24C2D36 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -356,6 +354,28 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		4D3C350694BD76D0E24C2D36 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-SettingsLoader/Pods-SettingsLoader-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseFirestore/gRPCCertificates.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/gRPCCertificates.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SettingsLoader/Pods-SettingsLoader-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		6C5EE0EC6E09369D54747E50 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -368,11 +388,8 @@
 				"${BUILT_PRODUCTS_DIR}/BoringSSL/openssl.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
 				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
-				"${BUILT_PRODUCTS_DIR}/gRPC/GRPCClient.framework",
 				"${BUILT_PRODUCTS_DIR}/gRPC-C++/grpcpp.framework",
 				"${BUILT_PRODUCTS_DIR}/gRPC-Core/grpc.framework",
-				"${BUILT_PRODUCTS_DIR}/gRPC-ProtoRPC/ProtoRPC.framework",
-				"${BUILT_PRODUCTS_DIR}/gRPC-RxLibrary/RxLibrary.framework",
 				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
@@ -383,11 +400,8 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/openssl.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GRPCClient.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/grpcpp.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/grpc.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ProtoRPC.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxLibrary.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
@@ -428,7 +442,6 @@
 				0ED8990D21A577F7000D581E /* AppDelegate.swift in Sources */,
 				0ED8993D21A57C0F000D581E /* SettingsListViewController.swift in Sources */,
 				0ED8993F21A57E70000D581E /* SettingsTableViewCell.swift in Sources */,
-				0EA7656321ACFF5300C13C13 /* SettingsHandler.swift in Sources */,
 				0ED8993B21A579F3000D581E /* SettingsObject.swift in Sources */,
 				0E5885D621A6BE2A00C0F9B8 /* DetailSettingsViewController.swift in Sources */,
 			);

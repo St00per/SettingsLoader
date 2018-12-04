@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FireHelper
 
 class SettingsListViewController: UIViewController {
     

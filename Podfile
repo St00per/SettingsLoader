@@ -6,9 +6,8 @@ target 'SettingsLoader' do
   use_frameworks!
 
   # Pods for SettingsLoader
-  pod 'Firebase/Core'
-  pod 'Firebase/Firestore'
-  
+  pod 'FireHelper', :path => "/Users/KirillShteffen/FireHelper/FireHelper"
+    
   target 'SettingsLoaderTests' do
     inherit! :search_paths
     # Pods for testing
