@@ -38,7 +38,7 @@ class DetailSettingsViewController: UIViewController {
                                                             type: presetTypeTextField.text ?? "(none)",
                                                             parameters: nil)
         let settingsToSave = dispatchedLocalObject(data: settingsObject)
-        SettingsHandler.default.saveData(dataSource: .local,
+        FireHelper.default.saveData(dataSource: .local,
                                          localData: settingsToSave,
                                          cloudData: nil,
                                          filename: presetNameTextField.text ?? "Unnamed")
@@ -56,7 +56,7 @@ class DetailSettingsViewController: UIViewController {
                                                             type: presetTypeTextField.text ?? "(none)",
                                                             parameters: nil)
         let settingsToSave = dispatchedCloudObject(data: settingsObject)
-        SettingsHandler.default.saveData(dataSource: .cloud,
+        FireHelper.default.saveData(dataSource: .cloud,
                                          localData: nil,
                                          cloudData: settingsToSave,
                                          filename: presetNameTextField.text ?? "Unnamed")
@@ -70,7 +70,7 @@ class DetailSettingsViewController: UIViewController {
         presetEnableSwitch.isOn = selectedSettings?.is_enabled ?? false
     }
 }
-extension DetailSettingsViewController: SettingsHandlerDispatchDelegate {
+extension DetailSettingsViewController: FireHelperDispatchDelegate {
     
     func dispatchedLocalObject<T>(data: T) -> Data where T : Decodable, T : Encodable {
         guard let jsonData = try? JSONEncoder().encode(data) else { return Data()}

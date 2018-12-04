@@ -54,7 +54,7 @@ class SettingsListViewController: UIViewController {
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()
         settingsList = []
-        SettingsHandler.default.downloadData(source: dataSource) { (downloadedData) in
+        FireHelper.default.downloadData(source: dataSource) { (downloadedData) in
             if self.dataSource == .local {
                 for data in downloadedData {
                     let settingsObject = self.receivedLocalObject(data: data as? Data ?? Data())
@@ -103,7 +103,7 @@ extension SettingsListViewController: UITableViewDelegate, UITableViewDataSource
         show(desVC, sender: nil)
     }
 }
-extension SettingsListViewController: SettingsHandlerReceiveDelegate {
+extension SettingsListViewController: FireHelperReceiveDelegate {
     
     func receivedLocalObject(data: Data) -> Codable {
         let settingsObject = try? JSONDecoder().decode(SettingsObject.self, from: data)
