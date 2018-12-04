@@ -23,7 +23,7 @@ class SettingsTableViewCell: UITableViewCell {
             alert.dismiss(animated: true, completion: nil)
             guard let deletingPreset = self.presetName, let dataSource = self.settingsListController?.dataSource else { return }
            
-            FireHelper.default.deleteLocalPreset(named: deletingPreset, dataSource: dataSource)
+            FireHelper.default.deleteLocalDocument(named: deletingPreset, dataSource: dataSource)
             self.settingsListController?.fillSettingsList()
         }
         let cancel = UIAlertAction(title: "Cancel",
