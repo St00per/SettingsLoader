@@ -2,32 +2,45 @@
 //  SettingsTableViewCell.swift
 //  SettingsLoader
 //
-//  Created by Кирилл Штеффен on 21/11/2018.
-//  Copyright © 2018 Кирилл Штеффен. All rights reserved.
+//  Created by Kirill Shteffen on 21/11/2018.
+//  Copyright © 2018 Kirill Shteffen. All rights reserved.
 //
 
 import UIKit
+import FireHelper
 
 class SettingsTableViewCell: UITableViewCell {
 
     static let name = String(describing: SettingsTableViewCell.self)
+    var settingsListController: SettingsListViewController?
+    var presetName: String?
     
-    @IBOutlet weak var settingsLabel: UILabel!
+    @IBOutlet weak var presetNameLabel: UILabel!
     
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
+    @IBAction func deletePreset(_ sender: UIButton) {
+        let alert = UIAlertController(title: "WARNING", message: "Delete this file?", preferredStyle: .alert)
+        let ok = UIAlertAction(title: "Ok", style: .default) { (action) in
+            alert.dismiss(animated: true, completion: nil)
+            guard let deletingPreset = self.presetName, let dataSource = self.settingsListController?.dataSource else { return }
+           
+            FireHelper.default.deleteLocalDocument(named: deletingPreset, dataSource: dataSource)
+            self.settingsListController?.fillSettingsList()
+        }
+        let cancel = UIAlertAction(title: "Cancel",
+                                         style: .cancel) {(_) in
+                                            alert.dismiss(animated: true, completion: nil)
+        }
+        alert.addAction(ok)
+        alert.addAction(cancel)
+        settingsListController?.present(alert, animated: true, completion: nil)
     }
-
-    func setLabel(settings: SettingsObject){
-        settingsLabel.text = settings.settingsTitle
+    
+    func setLabel(settings: SettingsObject) {
+        presetNameLabel.text = settings.preset_name
+        presetName = settings.preset_name
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
-
 }

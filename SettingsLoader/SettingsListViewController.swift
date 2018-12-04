@@ -2,30 +2,78 @@
 //  SettingsListViewController.swift
 //  SettingsLoader
 //
-//  Created by Кирилл Штеффен on 21/11/2018.
-//  Copyright © 2018 Кирилл Штеффен. All rights reserved.
+//  Created by Kirill Shteffen on 21/11/2018.
+//  Copyright © 2018 Kirill Shteffen. All rights reserved.
 //
 
 import UIKit
+import FireHelper
 
 class SettingsListViewController: UIViewController {
-
+    
     var settingsList: [SettingsObject] = []
+    var dataSource: DataSource = .local
     
+    @IBOutlet weak var settingsTable: UITableView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    @IBAction func addNewPreset(_ sender: Any) {
+        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let desVC = mainStoryboard.instantiateViewController(withIdentifier: "DetailSettingsViewController") as? DetailSettingsViewController else {
+            return
+        }
+        show(desVC, sender: nil)
+    }
+    
+    //Storage source selection
+    @IBAction func switchToLocal(_ sender: Any) {
+        dataSourceChange(dataSource: .local)
+    }
+    @IBAction func switchToCloud(_ sender: Any) {
+        dataSourceChange(dataSource: .cloud)
+    }
+    
+    func dataSourceChange(dataSource: DataSource)  {
+        self.dataSource = dataSource
         fillSettingsList()
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        activityIndicator.isHidden = true
+        fillSettingsList()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(false)
+        fillSettingsList()
+    }
+    
+    //Data receiving
     func fillSettingsList() {
-        let settingsOne = SettingsObject(withParameters: "HighSettings", firstInputParameter: "High", secondInputParameter: "High")
-        let settingsTwo = SettingsObject(withParameters: "MediumSettings", firstInputParameter: "Medium", secondInputParameter: "Medium")
-        let settingsThree = SettingsObject(withParameters: "LowSettings", firstInputParameter: "Low", secondInputParameter: "Low")
-        
-        settingsList.append(settingsOne)
-        settingsList.append(settingsTwo)
-        settingsList.append(settingsThree)
+        activityIndicator.isHidden = false
+        activityIndicator.startAnimating()
+        settingsList = []
+        FireHelper.default.downloadData(source: dataSource) { (downloadedData) in
+            if self.dataSource == .local {
+                for data in downloadedData {
+                    let settingsObject = self.receivedLocalObject(data: data as? Data ?? Data())
+                    self.settingsList.append(settingsObject as? SettingsObject ?? SettingsObject())
+                }
+            }
+            if self.dataSource == .cloud {
+                for data in downloadedData {
+                    let settingsObject = self.receivedCloudObject(data: data as? [String:Any] ?? [String:Any]())
+                    self.settingsList.append(settingsObject as? SettingsObject ?? SettingsObject())
+                }
+            }
+            
+            DispatchQueue.main.async {
+                self.settingsTable.reloadData()
+                self.activityIndicator.stopAnimating()
+                self.activityIndicator.isHidden = true
+            }
+        }
     }
 }
 
@@ -40,11 +88,34 @@ extension SettingsListViewController: UITableViewDelegate, UITableViewDataSource
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.name, for: indexPath) as? SettingsTableViewCell else {
             return UITableViewCell()
         }
-        
+        cell.settingsListController = self
         cell.setLabel(settings: settingsList[indexPath.row])
         return cell
-        
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        guard let desVC = mainStoryboard.instantiateViewController(withIdentifier: "DetailSettingsViewController") as? DetailSettingsViewController else {
+            return
+        }
+        desVC.selectedSettings = settingsList[indexPath.row]
+        show(desVC, sender: nil)
+    }
+}
+extension SettingsListViewController: FireHelperReceiveDelegate {
     
+    func receivedLocalObject(data: Data) -> Codable {
+        let settingsObject = try? JSONDecoder().decode(SettingsObject.self, from: data)
+        return settingsObject
+    }
+    
+    func receivedCloudObject(data: Dictionary<String, Any>) -> Codable {
+        var settingsObject = SettingsObject()
+        settingsObject.preset_id = data["preset_id"] as? String ?? "(none)"
+        settingsObject.preset_name = data["preset_name"] as? String ?? "(none)"
+        settingsObject.type = data["type"] as? String ?? "(none)"
+        settingsObject.is_enabled = data["preset_id"] as? Bool ?? false
+        return settingsObject
+    }
 }

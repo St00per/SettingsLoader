@@ -2,11 +2,12 @@
 //  AppDelegate.swift
 //  SettingsLoader
 //
-//  Created by Кирилл Штеффен on 21/11/2018.
-//  Copyright © 2018 Кирилл Штеффен. All rights reserved.
+//  Created by Kirill Shteffen on 21/11/2018.
+//  Copyright © 2018 Kirill Shteffen. All rights reserved.
 //
 
 import UIKit
+import FireHelper
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,6 +17,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        FireHelper.default.configure()
+        FireHelper.default.setReference(collectionName: "SettingsList")
         return true
     }
 
